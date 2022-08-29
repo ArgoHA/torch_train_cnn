@@ -173,8 +173,8 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
 def main():
     classes = ['small_gun', 'umbrella']
     im_size = (224, 224)
-    path_to_folder = '/Users/argosaakyan/Data/learn/pytorch_learn/data'
-    path_to_save = '/Users/argosaakyan/Data/learn/pytorch_learn/'
+    path_to_folder = ''
+    path_to_save = ''
     valid_part = 0.15
     test_part = 0.05
     batch_size = 32
