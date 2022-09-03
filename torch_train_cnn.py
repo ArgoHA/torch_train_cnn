@@ -158,13 +158,14 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
                 loss.backward()
                 optimizer.step()
 
-
+        # Get metrics after an epoch
         preds, valid_labels = get_preds(model, valid_data)
         f1 = round(f1_score(preds, valid_labels), 2)
         accuracy = round(accuracy_score(preds, valid_labels), 2)
 
         print(f'Valid accuracy: {accuracy}, valid f1: {f1}')
 
+        # Save best model
         if f1 > best_metric:
             best_metric = f1
             torch.save(model.state_dict(), os.path.join(path_to_save, 'model.pt'))
