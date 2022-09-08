@@ -75,12 +75,12 @@ def get_splited_data(path_to_folder, valid_part, test_part, classes, im_size, ba
 
 
 # get model predictions
-def get_preds(model, testing_data):
+def get_preds(model, testing_data, device):
     val_preds = []
     val_labels = []
     with torch.no_grad():
-        for data in testing_data:
-            images, labels = data
+        for data, target in testing_data:
+            images, labels = data.to(device), target.to(device)
             outputs = model.forward(images)
             val_preds.extend(torch.max(outputs.data, 1).indices.tolist())
             val_labels.extend(labels.tolist())
@@ -159,7 +159,7 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
                 optimizer.step()
 
         # Get metrics after an epoch
-        preds, valid_labels = get_preds(model, valid_data)
+        preds, valid_labels = get_preds(model, valid_data, device)
         f1 = round(f1_score(preds, valid_labels), 2)
         accuracy = round(accuracy_score(preds, valid_labels), 2)
 
@@ -181,19 +181,19 @@ def main():
     batch_size = 32
     epochs = 5
 
-    # device = torch.device('mps')
-    device = torch.device('cpu')
+    device = torch.device('mps')
+    # device = torch.device('cpu')
 
     train_data, valid_data, test_data = get_splited_data(path_to_folder, valid_part, test_part,
                                                          classes, im_size, batch_size)
 
-    model = Gun_classifier() # build the model
+    model = Gun_classifier().to(device) # build the model
     loss_func = nn.CrossEntropyLoss() # init loss function
     optimizer = torch.optim.Adam(model.parameters()) # init optimiser
 
     train(train_data, device, optimizer, model, loss_func, valid_data, epochs, path_to_save)
 
-    test_accuracy = round(accuracy_score(*get_preds(model, test_data)), 2)
+    test_accuracy = round(accuracy_score(*get_preds(model, test_data, device)), 2)
     print(f'Finished training, test accuracy: {test_accuracy}')
 
 
