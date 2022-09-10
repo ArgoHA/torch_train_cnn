@@ -113,6 +113,7 @@ class Gun_classifier(nn.Module):
         self.fc1 = nn.Linear(128, 64)
         self.activ4 = nn.ReLU()
 
+        self.fc2 = nn.Linear(64, 2) # n_classes
         self.sm = nn.Softmax(dim=1)
 
 
@@ -137,6 +138,7 @@ class Gun_classifier(nn.Module):
         x = self.fc1(x)
         x = self.activ4(x)
 
+        x = self.fc2(x)
         x = self.sm(x)
         return x
 
