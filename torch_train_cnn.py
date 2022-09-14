@@ -78,6 +78,8 @@ def get_splited_data(path_to_folder, valid_part, test_part, classes, im_size, ba
 def get_preds(model, testing_data, device):
     val_preds = []
     val_labels = []
+    model.eval() # set mode
+
     with torch.no_grad():
         for data, target in testing_data:
             images, labels = data.to(device), target.to(device)
@@ -147,6 +149,7 @@ def train(train_data, device, optimizer, model, loss_func, valid_data, epochs, p
     best_metric = 0
 
     for epoch in range(1, epochs + 1):
+        model.train() # set mode
         with tqdm(train_data, unit="batch") as tepoch:
             for data, target in tepoch:
                 tepoch.set_description(f"Epoch {epoch}/{epochs}")
