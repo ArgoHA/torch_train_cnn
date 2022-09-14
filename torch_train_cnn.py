@@ -135,7 +135,7 @@ class Gun_classifier(nn.Module):
         x = self.batch_norm3(x)
         x = self.activ3(x)
 
-        x = self.glob_pool(x).squeeze()
+        x = self.glob_pool(x).reshape(-1, 128)
 
         x = self.fc1(x)
         x = self.activ4(x)
